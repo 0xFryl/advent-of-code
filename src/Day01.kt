@@ -1,21 +1,37 @@
+import kotlin.math.abs
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    // Part 1
+    val input = readInput("Day01_source")
+    val inputLeft: MutableList<Int> = mutableListOf()
+    val inputRight: MutableList<Int> = mutableListOf()
+    val splitRegex = "\\s+".toRegex()
+
+    for (i in input) {
+        val groups = i.split(splitRegex)
+        inputLeft.add(groups[0].toInt())
+        inputRight.add(groups[1].toInt())
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    inputLeft.sort()
+    inputRight.sort()
+
+    var count = 0
+    for (i in 0..<inputLeft.size) {
+        count += abs(inputLeft[i] - inputRight[i])
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
+    println("Part 1: $count")
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    // Part 2
+    count = 0
+    val countItem = inputRight.groupingBy { it }.eachCount()
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    for (i in 0..<inputLeft.size) {
+        if (inputLeft[i] in countItem) {
+            count += inputLeft[i] * countItem[inputLeft[i]]!!
+        }
+    }
+
+    println("Part 2: $count")
 }
